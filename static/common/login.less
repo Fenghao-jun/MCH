@@ -1,0 +1,54 @@
+.login-container {
+  min-width: 973px;
+  min-height: 969px;
+  background-image: url('../../static/loginBack.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+
+  .login-lang {
+    background-color: transparent;
+    text-align: right;
+    margin: 20px 10px;
+  }
+
+  .el-card {
+    // height: 400px;
+    //width: 500px;
+    width: 600px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(33, 41, 47, 0.3);
+    border: none;
+
+    .el-card__header {
+      border-bottom: 1px solid #6d6161;
+      color: #d4cece;
+      font-size: 20px;
+    }
+
+    .el-form {
+      margin-right: 75px;
+
+      .el-form-item {
+        margin-right: 30px;
+      }
+
+      .el-form-item__label {
+        color: #d4cece;
+        font-size: 18px
+      }
+    }
+
+    .el-button {
+      width: 88px;
+    }
+    input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{
+      color:rgb(136, 132, 132);
+      font-size:14px;
+    }
+  }
+}
