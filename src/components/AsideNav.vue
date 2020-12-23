@@ -275,13 +275,24 @@ export default {
      * */
     openNavTab(menuPath){
       console.log(menuPath)
-      let path = menuPath.replace('/', '')
+      let path = menuPath.replace('/', '');
+      const hashPath={
+        home:'首页',
+        PowerManagement:'电源管理',
+        PortManagement:'接口管理',
+        VLANManagement:'VLAN设置',
+        SystemLog:'系统日志',
+        OperationLog:'操作日志',
+        UserManagement:'用户信息'
+      };
       // console.log(path)
       this.setStateValue({ name: 'activeTab', value: path })
       // 对增加的menuPath进行校验, 如果已经存在，则不做添加操作
-      let flag = this.aliveTabs.some( (item) => { return item === path } )
+      let flag = this.aliveTabs.some( (item) => {
+        // console.log(item.path)
+        return item.path == path } )
       if(!flag){
-        this.addTabs( path )
+        this.addTabs( {path:path,value:hashPath[path]} )
       }
       this.$router.push(path)
     },

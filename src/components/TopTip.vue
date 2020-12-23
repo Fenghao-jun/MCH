@@ -32,19 +32,9 @@
         <span>登录时间:&nbsp;{{loginTime}}</span>
         <span>版本:&nbsp;{{ version }}</span>
 
-        <span>
-          <el-button type="text" class="task-list" @click="toExcelList">
-            <i class="el-icon-document"></i>
-            excel任务列表
-          </el-button>
-        </span>
 
-        <span>
-          <el-button type="text" class="clear-notice" @click="clearNotice">
-            <i class="el-icon-delete"></i>
-            清空通知
-          </el-button>
-        </span>
+
+
         <span class="top-lang">
          <change-language></change-language>
         </span>
@@ -180,7 +170,7 @@ export default {
         bodyData:data
       };
       this.$http.requestPost(param).then((result)=>{
-        console.log(result);
+        // console.log(result);
         if(result.data.Data.State=='success'){
           this.$router.push('/Login');
           //清楚所有缓存

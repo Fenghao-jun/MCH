@@ -307,9 +307,9 @@ export default {
 
   },
   beforeDestroy(){
-    if (timer) {
-      clearInterval(timer); // 在Vue实例销毁前，清除我们的定时器
-    }
+    // if (timer) {
+    //   clearInterval(timer); // 在Vue实例销毁前，清除我们的定时器
+    // }
   },
   name: "home",
   components:{

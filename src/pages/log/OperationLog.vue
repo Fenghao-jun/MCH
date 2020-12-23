@@ -85,7 +85,7 @@ export default {
     return {
       //搜索内容
       tableData:[],
-      total:75,
+      total:0,
       Page:1,
       searchState:0,
       Stime:'',

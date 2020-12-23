@@ -57,7 +57,7 @@
 
           <el-form-item label="角色" prop="Role">
             <el-select v-model="addFrom.Role" placeholder="请选择角色">
-              <el-option label="管理员" value="管理员"></el-option>
+              <el-option label="管理员" value="管理员" v-if="this.role=='超级管理员'"></el-option>
               <el-option label="操作员" value="操作员"></el-option>
             </el-select>
           </el-form-item>
@@ -186,7 +186,8 @@ export default {
 
       },
       editEvent:false,
-      total:0
+      total:0,
+      role:window.sessionStorage.getItem('role')
     };
   },
   computed:{
@@ -206,7 +207,7 @@ export default {
         method:'post',
         bodyData:{
           Page:1,
-          Role:'超级管理员'
+          Role:window.sessionStorage.getItem('role')
         }
       };
       this.$http.requestPost(param).then((result)=>{
