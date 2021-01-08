@@ -123,9 +123,9 @@
             <el-col :span="20" class="title">
               槽位拓扑图
             </el-col>
-            <el-col :span="1">
-              <el-button>详情</el-button>
-            </el-col>
+<!--            <el-col :span="1">-->
+<!--              <el-button>详情</el-button>-->
+<!--            </el-col>-->
           </el-row>
         </div>
 
@@ -298,22 +298,25 @@ import 'echarts/lib/component/tooltip'
 import idea from '../../public.js'
 import AsideNav from "../../components/AsideNav";
 import {mapMutations, mapState} from "vuex";
+import OperationLog from "../log/OperationLog";
+import SystemLog from "../log/SystemLog";
 export default {
   mounted(){
     this.reload()
-    // const timer=setInterval(()=>{
+    // var timer=setInterval(()=>{
     //   this.getchart()
-    // },1000)
+    // },5000)
 
   },
   beforeDestroy(){
-    // if (timer) {
-    //   clearInterval(timer); // 在Vue实例销毁前，清除我们的定时器
-    // }
+    if (window.timer) {
+      clearInterval(timer); // 在Vue实例销毁前，清除我们的定时器
+    }
   },
   name: "home",
   components:{
-    AsideNav
+    AsideNav,
+    SystemLog,
   },
   data () {
     return {
@@ -479,18 +482,28 @@ export default {
     },
 
     getSystemLog:idea.throttle(function(level){
-      var dialog=level+"Dialog"
-      var data = level+'Data'
-      let param={
-        url:'/cgi-bin/getsyslog.cgi',
-        method:'post',
-        bodyData:{level:level,page:-1}
-      }
-      this.$http.requestPost(param).then((result,level)=>{
-        // console.log(result)
-        this._data[data]=result.data.Data.LogData;
-        this._data[dialog]=true
-      })
+
+      // var dialog=level+"Dialog"
+      // var data = level+'Data'
+      // let param={
+      //   url:'/cgi-bin/getsyslog.cgi',
+      //   method:'post',
+      //   bodyData:{level:level,page:1}
+      // }
+      // this.$http.requestPost(param).then((result,level)=>{
+      //   console.log(result)
+      //   // this._data[data]=result.data.Data.LogData;
+      //   // this._data[dialog]=true
+      //   console.log(SystemLog.data())
+      //
+      //   SystemLog.data().total=result.data.Data.Sum;
+      //   SystemLog.data().tableData=result.data.Data.LogData;
+      // })
+      this.moreLog( '/SystemLog',level);
+
+
+
+      // SystemLog.methods.search(level,1,this)
     },1000),
 
     //列表合并
@@ -545,16 +558,23 @@ export default {
     },
 
     //导入AsideNav方法打开日志
-    moreLog(menupath){
+    moreLog(menupath,level){
       // AsideNav.methods.openNavTab('/SystemLog');
+      console.log(menupath);
       let path =menupath.replace('/','');
+      console.log(path)
       this.setStateValue({ name: 'activeTab', value: path })
       console.log('ccc')
-      let flag = this.aliveTabs.some( (item) => { return item === path } )
+      let flag = this.aliveTabs.some( (item) => { return item.path === path } )
       if(!flag){
-        this.addTabs( path )
+        this.addTabs( {path:'SystemLog',value:'系统日志'} )
       }
-      this.$router.push(path)
+      this.$router.push({
+        path:path,
+        query:{
+          level:level
+        }
+      })
     },
 
     //cpu线状图

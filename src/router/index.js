@@ -15,6 +15,7 @@ import SystemLog from '../pages/log/SystemLog.vue';
 import OperationLog from '../pages/log/OperationLog.vue';
 import User from '../pages/user/User.vue';
 import UserManagement from "../pages/user/UserManagement";
+import updateSystem from "../pages/configInfo/updateSystem";
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
@@ -80,6 +81,11 @@ const routes = [
       name: 'UserManagement',
       component: UserManagement
     },
+    {
+      path:'/updateSystem',
+      name:'updateSystem',
+      component: updateSystem
+    }
 
 
 ]
@@ -102,7 +108,8 @@ router.beforeEach( (to, from, next)=>{
                    SystemLog,
                    PowerManagement,
                    Login,
-                   Register};
+                   Register,
+                   updateSystem};
   // 登录检查
   // console.log(to);
   // 需要针对cookie操作存取token，这里需要自己写一个cookie工具或者

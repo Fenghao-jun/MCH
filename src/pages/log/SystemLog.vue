@@ -6,7 +6,7 @@
       <span>系统日志</span>
     </div>
     <div class="head-button">
-      <el-button title="帮助"><i class="el-icon-notebook-1"></i></el-button>
+<!--      <el-button title="帮助"><i class="el-icon-notebook-1"></i></el-button>-->
     </div>
   </div>
 
@@ -20,20 +20,33 @@
           :value="item.value">
         </el-option>
       </el-select>
-      <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="search(level)">搜索</el-button>
     </div>
 
     <div class="right-container">
       <el-button @click="reload"><i class="el-icon-refresh"></i></el-button>
-      <el-button ><i class="el-icon-delete"></i></el-button>
+      <el-button @click="dialogVisible = true"><i class="el-icon-delete"></i></el-button>
      </div>
   </div>
+
+  <el-dialog
+    title="是否删除所有日志"
+    :visible.sync="dialogVisible"
+    width="30%">
+    <span>是否删除所有操作日志？</span>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="deleteLog">确 定</el-button>
+    </span>
+  </el-dialog>
+
 
   <div class="log-table">
     <el-table
       :data="tableData"
       style="width: 100%"
       border
+      :header-cell-style="headerStyle"
       >
         <el-table-column
           type="index"
@@ -88,6 +101,7 @@ export default {
     // this.createData3()
     // this.createData4()
     this.reload()
+    console.log(this.$route.query)
   },
   data () {
     return {
@@ -111,13 +125,21 @@ export default {
       }],
       level:'',
       total:0,
-      Page:1
+      Page:1,
+      dialogVisible: false,
+      headerStyle:{
+        // background: '#909399',
+        // color:'#FFFFFF',
+        color:'red !important'
+    }
     };
   },
   methods: {
     //获取
     //节流
     reload: idea.throttle(function(){
+      //没有传递参数则为空
+      this.level=this.$route.query.level || '';
       let data = JSON.parse(JSON.stringify(this._data))
       delete data.levelFilter
       delete data.tableData
@@ -126,6 +148,7 @@ export default {
         method:'post',
         bodyData:data
       }
+      console.log(param)
       this.$http.requestPost(param).then((result)=>{
         if(result.data.State=='success'){
           this.total = result.data.Data.Sum;
@@ -139,22 +162,34 @@ export default {
     },1000),
 
 
-    search(){
-      let data = JSON.parse(JSON.stringify(this._data))
-      delete data.levelFilter
-      delete data.tableData
+    search(level,page){
+      console.log('我被调用了')
+      // let data = JSON.parse(JSON.stringify(this._data))
+      // console.log(tar)
+      // console.log(this)
+      const searchLevel=level||this.level;
+      const searchPage=page||this.Page;
+      // delete data.levelFilter
+      // delete data.tableData
       let param ={
         url:'/cgi-bin/getsyslog.cgi',
         method:'post',
-        bodyData:data
+        bodyData:{
+          Page:searchPage,
+          level:searchLevel
+        }
       }
-      // console.log(param)
+      console.log(param)
       this.$http.requestPost(param).then((result)=>{
         if(result.data.State=='success'){
-
+          this.total = result.data.Data.Sum;
+          this.tableData = result.data.Data.LogData;
+        }else if(result.data.State=='fail'){
+          this.$message({type:'warning',message:result.data.Info});
+        }else{
+          this.$message({type:'warning',message:'未知错误，请联系开发人员！'})
         }
-        this.total = result.data[0]
-        this.tableData = result.data[1]
+
       })
     },
 
@@ -165,6 +200,7 @@ export default {
       if(this.level == ''){
         delete data.level
       }
+
       let param = {
         url:'/cgi-bin/getsyslog.cgi',
         method:'post',
@@ -230,7 +266,27 @@ export default {
     getVal(val){
       console.log(val)
       this.val=val
-    }
+    },
+    deleteLog(){
+      const param={
+        url:'/cgi-bin/setlog.cgi',
+        method:'post',
+        bodyData:{
+          LogType:'syslog'
+        }
+      }
+      this.$http.requestPost(param).then((result)=>{
+        if(result.data.State=='success'){
+          this.reload();
+          this.tableData=[];
+          this.dialogVisible = false
+        }else if(result.data.State=='fail'){
+          this.$message({type:'warning',message:result.data.Info});
+        }else{
+          this.$message({type:'warning',message:'未知错误，请联系开发人员！'});
+        }
+      })
+    },
   },
 }
 </script>

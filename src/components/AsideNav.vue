@@ -73,7 +73,7 @@ export default {
        'el-icon-search',
        'el-icon-time',
        'el-icon-s-data',
-       'el-icon-setting',
+       // 'el-icon-setting',
       //  'el-icon-document',
        'el-icon-set-up',
        'el-icon-s-custom'
@@ -147,13 +147,13 @@ export default {
           },
 
 
-          {
-            name: '配置信息',
-            path: '',
-            children: [
-
-            ]
-          },
+          // {
+          //   name: '配置信息',
+          //   path: '',
+          //   children: [
+          //
+          //   ]
+          // },
           /*         {
                     name: '参数设置',
                     path: '',
@@ -208,16 +208,19 @@ export default {
           name: '配置信息',
           path: '',
           children: [
-
+            {
+              name:'系统更新',
+              path:'/updateSystem'
+            }
           ]
         },
-/*         {
-          name: '参数设置',
-          path: '',
-          children: [
-
-          ]
-        }, */
+        // {
+        //   name: '参数设置',
+        //   path: '',
+        //   children: [
+        //
+        //   ]
+        // },
         {
           name: '权限管理',
           path: '',
@@ -277,13 +280,14 @@ export default {
       console.log(menuPath)
       let path = menuPath.replace('/', '');
       const hashPath={
-        home:'首页',
+        home:'概览',
         PowerManagement:'电源管理',
-        PortManagement:'接口管理',
-        VLANManagement:'VLAN设置',
+        PortManagement:'端口管理',
+        VLANManagement:'VLAN管理',
         SystemLog:'系统日志',
         OperationLog:'操作日志',
-        UserManagement:'用户信息'
+        UserManagement:'用户信息',
+        updateSystem: '系统更新'
       };
       // console.log(path)
       this.setStateValue({ name: 'activeTab', value: path })

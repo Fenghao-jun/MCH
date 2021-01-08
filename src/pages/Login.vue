@@ -1,8 +1,8 @@
 <template>
   <div class="login login-container">
-    <div class="login-lang">
-      <change-language color="#409EFF"></change-language>
-    </div>
+<!--    <div class="login-lang">-->
+<!--      <change-language color="#409EFF"></change-language>-->
+<!--    </div>-->
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>{{$t('login.login')}}</span>
@@ -56,9 +56,9 @@
               {{$t('login.login')}}
             </el-button>
 
-            <el-button @click="toRegister">
-              {{$t('login.register')}}
-            </el-button>
+<!--            <el-button @click="toRegister">-->
+<!--              {{$t('login.register')}}-->
+<!--            </el-button>-->
         </div>
 
       </div>
@@ -188,6 +188,8 @@ export default {
           window.sessionStorage.setItem('isLogin', 'true');
           window.sessionStorage.setItem('loginTime', loginTime);
           this.setStateValue({ name: 'ableFlag', value: true});
+          this.setStateValue({name:'aliveTabs',value:[{path:'home',value:'概览'}]})
+          this.setStateValue({ name: 'activeTab', value: 'home'})
           this.$router.push({path:'/home'});
         }else if(result.data.State=='fail'){
           this.$message({type:'warning',message:result.data.Info});

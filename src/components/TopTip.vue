@@ -35,9 +35,9 @@
 
 
 
-        <span class="top-lang">
-         <change-language></change-language>
-        </span>
+<!--        <span class="top-lang">-->
+<!--         <change-language></change-language>-->
+<!--        </span>-->
       </div>
     </el-card>
 
@@ -210,9 +210,26 @@ export default {
      * @todo 细节需要完善
      * **/
     logout() {
-      console.log('logout')
-      window.sessionStorage.setItem('isLogin', '')
-      this.$router.push({path: '/Login'})
+      const param={
+        url:'/cgi-bin/setlogout.cgi',
+        method: 'post',
+        bodyData: {
+          UserName:window.sessionStorage.getItem('userName')
+        }
+      }
+      this.$http.requestPost(param).then((result)=>{
+        if(result.data.State=='success'){
+          window.sessionStorage.clear();
+          this.$router.push({path: '/Login'})
+        }else if(result.data.State=='fail'){
+          this.$message({type:'warning',message:result.data.Info});
+        }else{
+          this.$message({type:'warning',message:'未知错误，请联系开发人员！'});
+        }
+      })
+      // console.log('logout')
+      // window.sessionStorage.setItem('isLogin', '')
+
     },
 
   }

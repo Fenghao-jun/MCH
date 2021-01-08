@@ -7,7 +7,7 @@
       <div class="right-container">
         <el-button @click="userEdit"><i class="el-icon-s-tools"></i></el-button>
         <el-button @click="deleteUser"> <i class="el-icon-delete"></i></el-button>
-        <el-button @click="addDialog = true"><i class="el-icon-plus"></i></el-button>
+        <el-button @click="openAddDialog"><i class="el-icon-plus"></i></el-button>
       </div>
     </div>
 
@@ -272,6 +272,22 @@ export default {
 
     getRowData(scope){
       Object.assign(this.rowData,scope.row);
+    },
+
+    openAddDialog(){
+      this.addFrom={
+        Action:0,
+          Role:'',
+          UserName:'',
+          Name:'',
+          Department:'',
+          Position:'',
+          Phone:'',
+          Email:'',
+          PassWord:'',
+          ConfirmPW:'',
+      }
+      this.addDialog=true;
     },
 
     addUser(){

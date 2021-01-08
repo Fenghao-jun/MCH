@@ -6,7 +6,7 @@
       <span>操作日志</span>
     </div>
     <div class="head-button">
-      <el-button title="帮助"><i class="el-icon-notebook-1"></i></el-button>
+<!--      <el-button title="帮助"><i class="el-icon-notebook-1"></i></el-button>-->
     </div>
   </div>
 
@@ -31,10 +31,21 @@
     </div>
 
     <div class="right-container">
-      <el-button ><i class="el-icon-refresh"></i></el-button>
-      <el-button ><i class="el-icon-delete"></i></el-button>
+      <el-button @click="reload"><i class="el-icon-refresh"></i></el-button>
+      <el-button @click="dialogVisible = true"><i class="el-icon-delete"></i></el-button>
      </div>
   </div>
+
+    <el-dialog
+      title="是否删除所有日志"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <span>是否删除所有操作日志？</span>
+      <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="deleteLog">确 定</el-button>
+    </span>
+    </el-dialog>
 
   <div class="log-table">
     <el-table
@@ -90,6 +101,7 @@ export default {
       searchState:0,
       Stime:'',
       Etime:'',
+      dialogVisible: false,
     };
   },
   methods: {
@@ -210,6 +222,27 @@ export default {
         }
         this.tableData.push(item)
       }
+    },
+    deleteLog(){
+
+      const param={
+        url:'/cgi-bin/setlog.cgi',
+        method:'post',
+        bodyData:{
+          LogType:'oplog'
+        }
+      }
+      this.$http.requestPost(param).then((result)=>{
+        if(result.data.State=='success'){
+          this.reload();
+          this.tableData=[];
+          this.dialogVisible = false
+        }else if(result.data.State=='fail'){
+          this.$message({type:'warning',message:result.data.Info});
+        }else{
+          this.$message({type:'warning',message:'未知错误，请联系开发人员！'});
+        }
+      })
     },
   },
 }

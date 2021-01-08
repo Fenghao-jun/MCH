@@ -58,7 +58,7 @@ export default {
         height:''
       },
       menu:{
-        home:'首页',
+        home:'概览',
 
       }
     }
@@ -81,13 +81,14 @@ export default {
     let currentPath = window.location.pathname.replace('/MCH/', '');
     console.log(currentPath)
     const hashPath={
-      home:'首页',
+      home:'概览',
       PowerManagement:'电源管理',
-      PortManagement:'接口管理',
-      VLANManagement:'VLAN设置',
+      PortManagement:'端口管理',
+      VLANManagement:'VLAN管理',
       SystemLog:'系统日志',
       OperationLog:'操作日志',
-      UserManagement:'用户信息'
+      UserManagement:'用户信息',
+      updateSystem:'系统更新',
     };
 
     if( currentPath == 'Login' || currentPath == 'Register'){
@@ -206,13 +207,14 @@ export default {
       let currentPath = window.location.pathname.replace('/MCH/', '')
       console.log(window.location.pathname)
       const hashPath={
-        首页:"home",
+        概览:"home",
         电源管理:'PowerManagement',
-        接口管理:'PortManagement',
-        VLAN设置:'VLANManagement',
+        端口管理:'PortManagement',
+        VLAN管理:'VLANManagement',
         系统日志:'SystemLog',
         操作日志:'OperationLog',
-        用户信息:'UserManagement'
+        用户信息:'UserManagement',
+        系统更新:'updateSystem'
       };
       // let currentPath = hashPath[path];
       this.setStateValue({ name: 'activeTab', value: hashPath[path] })

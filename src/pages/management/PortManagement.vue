@@ -1,14 +1,6 @@
 <template>
   <div class="port-management">
-    <div class="port-head">
-      <div class="head-text">
-        <span>接口</span>
-      </div>
-      <!-- <div class="head-button">
-        <el-button type="primary" plain>面板</el-button>
-        <el-button type="primary" plain>流量统计</el-button>
-      </div>-->
-    </div>
+
 
     <!-- 搜索容器 -->
     <div class="select-container">
@@ -31,13 +23,19 @@
           @keyup.enter.native="search"
           @clear="reload"
         >
-          <i slot="suffix" class="el-input__icon el-icon-search" @click="search"></i>
         </el-input>
+        <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+
+<!--        <el-button type="button">-->
+<!--          <span>更新软件</span>-->
+<!--        </el-button>-->
         <!-- 筛选 -->
       </div>
+
       <!-- right -->
       <div class="right-container">
         <el-button icon="el-icon-refresh" @click="reload"></el-button>
+
       </div>
     </div>
     <!-- 显示表单 -->
@@ -121,7 +119,15 @@
           <el-col :span="4">
             <div class="grid-content bg-purple">
               链路状态
-              <el-tooltip content="我是悬浮提示" placement="top">
+              <el-tooltip  placement="top">
+                <div slot="content">
+                  <p>接口链路状态，取值为:</p>
+                  <ul>
+                    <li>ADM:接口已被手工关闭。</li>
+                    <li>Down:没有物理连线或者线路故障。</li>
+                    <li>Up:接口未被手工关闭，物理线路通畅。</li>
+                  </ul>
+                </div>
                 <i class="el-icon-warning"></i>
               </el-tooltip>
             </div>
@@ -185,7 +191,14 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-              <el-tooltip content="我是悬浮提示" placement="top">
+              <el-tooltip  placement="top">
+                <div slot="content">
+                  <ul>
+                    <li>全双工：接口在发送数据包的同时可以接收数据包；</li>
+                    <li>半双工：接口同一时刻只能发送或接收数据包；</li>
+<!--                    <li>自协商：本接口和对端接口自动协商来决定是工作在全双工还是半双工模式。</li>-->
+                  </ul>
+                </div>
                 <i class="el-icon-warning"></i>
               </el-tooltip>
             </div>
@@ -209,7 +222,15 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-              <el-tooltip content="我是悬浮提示" placement="top">
+              <el-tooltip  placement="top">
+                <div slot="content">
+                  <p>根据端口在转发报文时对VLAN Tag的不同处理方式，可将端口的链路类型分为三种：</p>
+                  <ul>
+                    <li>Access：端口只能发送一个VLAN的报文，发出去的报文不带VLAN Tag。一般用于和不能识别VLAN Tag的用户终端设备相连，或者不需要区分不同VLAN成员时使用。</li>
+                    <li>Trunk：端口能发送多个VLAN的报文，发出去的端口缺省VLAN的报文不带VLAN Tag，其他VLAN的报文都必须带VLAN Tag。通常用于网络传输设备之间的互连。</li>
+                    <li>Hybrid：端口能发送多个VLAN的报文，端口发出去的报文可根据需要配置某些VLAN的报文带VLAN Tag，某些VLAN的报文不带VLAN Tag。一般用于相连的网络设备或用户终端中，部分识别VLAN Tag、部分不识别VLAN Tag的情况。</li>
+                  </ul>
+                </div>
                 <i class="el-icon-warning"></i>
               </el-tooltip>
             </div>
@@ -219,7 +240,11 @@
               <el-input v-model="dialogData.PVID" placeholder="请输入内容"></el-input>
               <span>
                 (1-4094)
-                <el-tooltip content="我是悬浮提示" placement="top">
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    端口缺省VLAN的编号。端口收到不带VLAN Tag的报文时，会在缺省VLAN中传输；发送缺省VLAN的报文时，Access和Trunk端口会去掉VLAN Tag再发送，Hybrid端口可配置是否去掉VLAN Tag再发送。
+                    <br>Access端口的缺省VLAN就是它所在的VLAN，Trunk端口和Hybrid端口可以允许多个VLAN通过，能够配置端口缺省VLAN。
+                  </div>
                   <i class="el-icon-warning"></i>
                 </el-tooltip>
               </span>
@@ -248,9 +273,9 @@
           </el-col>
           <el-col :span="12">
             <div class="grid-content bg-purple-light">
-              <span>(当前:{{rateValue}})</span>
+              <span>(当前:{{dialogData.RateValue}})</span>
               <br />
-              <el-select v-model="rateValue" placeholder="请选择">
+              <el-select v-model="dialogData.Rate" placeholder="请选择">
                 <el-option
                   v-for="item in rateType"
                   :key="item.value"
@@ -258,9 +283,7 @@
                   :value="item.value"
                 ></el-option>
               </el-select>
-              <el-tooltip content="我是悬浮提示" placement="top">
-                <i class="el-icon-warning"></i>
-              </el-tooltip>
+
             </div>
           </el-col>
         </el-row>
@@ -304,14 +327,14 @@
               </el-tooltip>
             </div>
           </el-col>
-        </el-row>
+        </el-row>-->
         <el-row>
           <el-col :span="4">
             <div class="grid-content bg-purple">端口流量控制</div>
           </el-col>
           <el-col :span="12">
             <div class="grid-content bg-purple-light">
-              <el-select v-model="flowValue" placeholder="请选择">
+              <el-select v-model="dialogData.FlowControl" placeholder="请选择">
                 <el-option
                   v-for="item in flowControl"
                   :label="item.label"
@@ -319,7 +342,12 @@
                   :key="item.value"
                 ></el-option>
               </el-select>
-              <el-tooltip content="我是悬浮提示" placement="top">
+              <el-tooltip  placement="top">
+                <div slot="content">
+                  开启流量控制功能后，如果本端设备发生拥塞，将发送消息通知对端设备暂时停止发送报文；对端设备收到该消息后将暂时停止向本端发送报文；反之亦然。用于避免报文丢失。
+                  <br>
+                  开启接收时流量控制功能后，当本端收到对端的流量控制报文，会停止向对端发送报文；当本端发生拥塞时，设备不能向对端发送流量控制报文。
+                </div>
                 <i class="el-icon-warning"></i>
               </el-tooltip>
             </div>
@@ -333,63 +361,60 @@
             <div class="grid-content bg-purple-light">
               <span>
                 广播风暴抑制
-                <el-tooltip content="我是悬浮提示" placement="top">
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    <p>开启该功能后，当接口上的广播流量超过抑制阈值时，系统会丢弃超出流量限制的报文，将流量降低到限定范围内，保证网络业务的正常运行。配置Mbps=速率时表示不抑制。</p>
+                    <ul>
+                      <li>Mbps：接口每秒允许转发的最大兆比特数，取值范围为0～接口带宽。</li>
+                    </ul>
+                  </div>
                   <i class="el-icon-warning"></i>
                 </el-tooltip>
               </span>
               <br />
-              <el-select v-model="broadCastStorm1Value" placeholder="请选择">
-                <el-option
-                  v-for="item in broadCastStorm1"
-                  :label="item.label"
-                  :value="item.value"
-                  :key="item.value"
-                ></el-option>
-              </el-select>
-              <el-input v-model="broadCastStorm1Num" placeholder="请输入数值"></el-input>
+
+              <el-input v-model="dialogData.BroadCast" placeholder="请输入数值"></el-input> Mbps
               <br />
               <span>
                 组播风暴抑制
-                <el-tooltip content="我是悬浮提示" placement="top">
+                <el-tooltip placement="top">
+                  <div slot="content">
+                    <p>开启该功能后，当接口上的组播流量超过抑制阈值时，系统会丢弃超出流量限制的报文，将流量降低到限定范围内，保证网络业务的正常运行。配置Mbps=速率时表示不抑制。
+                    </p>
+                    <ul>
+                      <li>Mbps：接口每秒允许转发的最大兆比特数，取值范围为0～接口带宽。</li>
+                    </ul>
+                  </div>
                   <i class="el-icon-warning"></i>
                 </el-tooltip>
               </span>
               <br />
-              <span>
+              <!-- <span>
                 抑制报文类型
                 <el-radio v-model="messageType" label="1">全部</el-radio>
                 <el-radio v-model="messageType" label="2">未知报文</el-radio>
-              </span>
-              <br />
-              <el-select v-model="broadCastStorm2Value" placeholder="请选择">
-                <el-option
-                  v-for="item in broadCastStorm2"
-                  :label="item.label"
-                  :value="item.value"
-                  :key="item.value"
-                ></el-option>
-              </el-select>
-              <el-input v-model="broadCastStorm2Num" placeholder="请输入数值"></el-input>
-              <br />
-              <span>
-                未知单播风暴抑制
-                <el-tooltip content="我是悬浮提示" placement="top">
-                  <i class="el-icon-warning"></i>
-                </el-tooltip>
-              </span>
-              <br />
-              <el-select v-model="broadCastStorm3Value" placeholder="请选择">
-                <el-option
-                  v-for="item in broadCastStorm3"
-                  :label="item.label"
-                  :value="item.value"
-                  :key="item.value"
-                ></el-option>
-              </el-select>
-              <el-input v-model="broadCastStorm3Num" placeholder="请输入数值"></el-input>
+              </span> -->
+
+              <el-input v-model="dialogData.MultiCast" placeholder="请输入数值"></el-input> Mbps
+<!--              <span>-->
+<!--                未知单播风暴抑制-->
+<!--                <el-tooltip content="我是悬浮提示" placement="top">-->
+<!--                  <i class="el-icon-warning"></i>-->
+<!--                </el-tooltip>-->
+<!--              </span>-->
+<!--              <br />-->
+<!--              <el-select v-model="broadCastStorm3Value" placeholder="请选择">-->
+<!--                <el-option-->
+<!--                  v-for="item in broadCastStorm3"-->
+<!--                  :label="item.label"-->
+<!--                  :value="item.value"-->
+<!--                  :key="item.value"-->
+<!--                ></el-option>-->
+<!--              </el-select>-->
+<!--              <el-input v-model="broadCastStorm3Num" placeholder="请输入数值"></el-input>-->
             </div>
           </el-col>
-        </el-row> -->
+        </el-row>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="setPort(dialogData)">确 定</el-button>
@@ -400,8 +425,6 @@
 </template>
 
 <script>
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
 import idea from '../../public.js';
 export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
@@ -466,16 +489,16 @@ data() {
           label:'半双工'
         }],
         rateType:[{
-              value:"10Mbps",
+              value:"10M",
               label:"10Mbps"
               },{
-              value:"100Mbps",
+              value:"100M",
               label:"100Mbps"
               },{
-              value:"1Gbps",
-              label:"1Gbps"
+              value:"1000M",
+              label:"1000Mbps"
               },{
-              value:"自协商",
+              value:"AUTO_NEGOTIATION",
               label:"自协商"
               }],
         rateValue:"自协商",
@@ -486,27 +509,27 @@ data() {
         BPDU:false,
         EEE:false,
         flowControl:[{
-              value:"选项1",
+              value:"TXRX_ENABLE",
               label:"开启流量控制"
               },{
-              value:"选项2",
+              value:"DISABLE",
               label:"关闭流量控制"
               },{
-              value:"选项3",
+              value:"RXONLY_ENABLE",
               label:"只在接受包下开启"
               }],
         flowValue:"",
         broadCastStorm1:[{
-              value:"选项1",
+              value:"ratio",
               label:"ratio"
               },{
-              value:"选项2",
+              value:"pps",
               label:"pps"
               },{
-              value:"选项3",
-              label:"Kbps"
+              value:"Mbps",
+              label:"Mbps"
               }],
-        broadCastStorm1Value:"",
+        broadCastStorm1Value:"Mbps",
         broadCastStorm1Num:"100",
         broadCastStorm2:[{
               value:"选项1",
@@ -549,8 +572,9 @@ methods: {
         ID:window.sessionStorage.getItem('userName')
       }
     }
+
     this.$http.requestPost(param).then((result) => {
-      // console.log(result);
+      console.log(result);
       if(result.data.State=='success'){
         this.tableData = [];
         for(let i =0 ;i<result.data.Data.PortInfo.length;i++){
@@ -559,7 +583,7 @@ methods: {
           result.data.Data.PortInfo[i].DuplexMode == "FULL_DUPLEX"?result.data.Data.PortInfo[i].DuplexMode = "全双工":result.data.Data.PortInfo[i].DuplexMode = "半双工"
           result.data.Data.PortInfo[i].LinkStatus=='ADM'?result.data.Data.PortInfo[i].checked=true:result.data.Data.PortInfo[i].checked=false
         }
-        this.hasVLAN=result.data.Data.hasVLAN;
+        this.hasVLAN=result.data.Data.HasVlan;
         this.tableData=result.data.Data.PortInfo;
       }else if(result.data.State=='fail'){
         this.$message({type:'warning',message:result.data.Info});
@@ -572,23 +596,20 @@ methods: {
 
   //设置
   setPort(){
+    let submitDate=JSON.parse(JSON.stringify(this.dialogData));
     //判断是否存在VLAN
-    if(this.hasVLAN.includes(Number(this.dialogData.PVID))){
-      if(this.dialogData.DuplexMode =="半双工")
-      {this.dialogData.DuplexMode = "HALF_DUPLEX"}
-      else if(this.dialogData.DuplexMode == "全双工")
-      {this.dialogData.DuplexMode = "FULL_DUPLEX"}
-      this.dialogData.PVID = parseInt(this.dialogData.PVID)
+    if(this.hasVLAN.includes(Number(submitDate.PVID))){
+      submitDate.PVID = parseInt(submitDate.PVID)
       //类型为Trunk进入判断
       if(this.dialogData.LinkType == 'Trunk'){
         //判断是否为string类型，如果不是则进行split
-        if(typeof(this.dialogData.PermitVlan)=='string'){
-          let PermitVlan = this.dialogData.PermitVlan
-          this.dialogData.PermitVlan = PermitVlan.split(",")
+        if(typeof(submitDate.PermitVlan)=='string'){
+          let PermitVlan = submitDate.PermitVlan
+          submitDate.PermitVlan = PermitVlan.split(",")
         }
-        for(let i = 0; i<this.dialogData.PermitVlan.length;i++){
-          if(!(this.hasVLAN.includes(Number(this.dialogData.PermitVlan[i])))){
-            alert('VLAN'+this.dialogData.PermitVlan[i]+'不存在')
+        for(let i = 0; i<submitDate.PermitVlan.length;i++){
+          if(!(this.hasVLAN.includes(Number(submitDate.PermitVlan[i])))){
+            alert('VLAN'+submitDate.PermitVlan[i]+'不存在')
             return
           }
         }
@@ -596,47 +617,75 @@ methods: {
       //类型为Hybrid进入判断
       if(this.dialogData.LinkType == 'Hybrid'){
         //判断是否为string类型，如果不是则进行split
-        if(typeof(this.dialogData.TaggedVlan)=='string'){
-          let TaggedVlan = this.dialogData.TaggedVlan
-          this.dialogData.TaggedVlan = TaggedVlan.split(',')
+        if(typeof(submitDate.TaggedVlan)=='string'){
+          let TaggedVlan = submitDate.TaggedVlan
+          submitDate.TaggedVlan = TaggedVlan.split(',')
         }
-        if(typeof(this.dialogData.UntaggedVlan)=='string'){
-          let UntaggedVlan = this.dialogData.UntaggedVlan
-          this.dialogData.UntaggedVlan = UntaggedVlan.split(',')
+        if(typeof(submitDate.UntaggedVlan)=='string'){
+          let UntaggedVlan = submitDate.UntaggedVlan
+          submitDate.UntaggedVlan = UntaggedVlan.split(',')
         }
         //判断TaggedVlan
-        for(let i = 0; i<this.dialogData.TaggedVlan.length;i++){
-          if(!(this.hasVLAN.includes(Number(this.dialogData.TaggedVlan[i])))){
-            alert('VLAN'+this.dialogData.TaggedVlan[i]+'不存在')
+        for(let i = 0; i<submitDate.TaggedVlan.length;i++){
+          if(!(this.hasVLAN.includes(Number(submitDate.TaggedVlan[i])))){
+            alert('VLAN'+submitDate.TaggedVlan[i]+'不存在')
             return
           }
         }
         //判断UntaggedVlan
-        for(let i = 0; i<this.dialogData.UntaggedVlan.length;i++){
-          if(!(this.hasVLAN.includes(Number(this.dialogData.UntaggedVlan[i])))){
-            alert('VLAN'+this.dialogData.UntaggedVlan[i]+'不存在')
+        for(let i = 0; i<submitDate.UntaggedVlan.length;i++){
+          if(!(this.hasVLAN.includes(Number(submitDate.UntaggedVlan[i])))){
+            alert('VLAN'+submitDate.UntaggedVlan[i]+'不存在')
             return
           }
         }
       };
       //判断ADM
-      if(this.dialogData.checked==true){
+      if(submitDate.checked==true){
         console.log('ADM')
         this.dialogData.LinkStatus='ADM'
       }else{
         console.log("up")
         this.dialogData.LinkStatus='Up'
       };
+      //判断端口风暴抑制是否超出范围,不等大于rate
+      const range = parseInt(submitDate.Rate);
+        //判断广播风暴数值是否合法
+      if(this.dialogData.BroadCast>range || !idea.isInt(+submitDate.BroadCast)){
+        this.$message({type:'warning',message:`请输入小于${range}的整数`})
+        return
+      }else{
+        this.dialogData.BroadCast= +this.dialogData.BroadCast;
+      }
+        //判断组团风暴数值是否合法
+      if(this.dialogData.MultiCast>range || !idea.isInt(+submitDate.MultiCast)){
+        this.$message({type:'warning',message:`请输入小于${range}的整数`})
+        return
+      }else {
+        submitDate.MultiCast = +submitDate.MultiCast;
+      }
+      //转换为后端需要的数据
+      if(this.dialogData.DuplexMode =="半双工") {
+        submitDate.DuplexMode = "HALF_DUPLEX"
+      }
+      else if(this.dialogData.DuplexMode == "全双工") {
+        submitDate.DuplexMode = "FULL_DUPLEX"
+      }
+      if(this.dialogData.RateValue=='自协商'){
+        submitDate.RateValue='AUTO_NEGOTIATION'
+      }
       let param ={
       url: '/cgi-bin/setport.cgi',
       method: 'post',
-      bodyData: this.dialogData
+      bodyData: submitDate
       };
       console.log(param)
       this.$http.requestPost(param).then((result)=>{
       console.log(result.data)
       if(result.data.State == "success"){
         this.reload()
+        this.dialogVisible = false
+        this.$message({type:'success',message:'设置成功'})
       }else{
         this.$message({
           showClose: true,
@@ -645,7 +694,6 @@ methods: {
         })
       }
     })
-      this.dialogVisible = false
     }else{
       this.$message({
         showClose: true,
@@ -682,44 +730,42 @@ methods: {
 
   //对话框
   openDialog(event){
-    this.dialogData = event
+    this.dialogData = JSON.parse(JSON.stringify(event))
+
     //判断速率是否自协商
     if(this.dialogData.RateValue == "UN_NEGOTIATION"){
       if(this.dialogData.Rate == "1000M"){
-        this.rateValue = "1Gbps"
+        this.dialogData.RateValue = "1000Mbps"
       }else if(this.dialogData.Rate == "100M"){
-        this.rateValue = "100Mbps"
+        this.dialogData.RateValue = "100Mbps"
       }else if(this.dialogData.Rate == "10M"){
-        this.rateValue = "10Mbps"
+        this.dialogData.RateValue = "10Mbps"
       }
     }else{
-        this.rateValue = "自协商"
+      this.dialogData.RateValue = "自协商"
     }
     console.warn(this.dialogData)
+
     this.dialogVisible = true
   },
+
   changLinkStatus(){
     console.log(this.dialogData.checked)
     this.dialogData.checked==true?this.dialogData.checked=false:this.dialogData.checked=true;
-  }
+  },
+
+
+
 
 },
 
 }
 </script>
 <style  scoped>
-/* 设置头部 */
-.port-head {
-  display: flex;
-  flex: 1;
-  justify-content: space-between;
+ul{
+  margin-left: 15px;
 }
-.head-text {
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  font-size: 22px;
-}
+
 
 /* 搜索 */
 .select-container {
@@ -732,10 +778,11 @@ methods: {
   width: 350px;
 }
 .select-container {
-  height: 80px;
-  line-height: 80px;
-  margin-top: 10px;
-  border-top: 2px solid #ebeef5;
+  /*height: 80px;*/
+  /*line-height: 80px;*/
+  text-align: center;
+  /*border-top: 2px solid #ebeef5;*/
+  padding: 1% 0;
   border-bottom: 2px solid #ebeef5;
 }
 .left-container {

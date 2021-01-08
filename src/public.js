@@ -22,5 +22,13 @@ export default {
             fn.apply(th, args);
         }
     }
+  },
+
+  /* *判断是否是整数
+  * 因为es5没有方法判断是否整数
+  *
+  */
+  isInt(num){
+    return typeof num === 'number'&& num%1 === 0;
   }
 }

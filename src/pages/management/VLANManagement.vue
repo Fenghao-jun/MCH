@@ -1,46 +1,44 @@
 <template>
   <div class="VLANManagement">
     <div class="port-head">
-      <div class="head-text">
-        <span>VLAN</span>
-      </div>
-      <div class="head-button">
-        <el-button @click="helpDialog = true" ><i class="el-icon-notebook-1" title="帮助"></i></el-button>
-        <el-dialog title="VLAN联机帮助"
-                   :visible.sync="helpDialog"
-                   width="50%">
-            <div class="help">
-              <h2>VLAN简介</h2>
-                <p class="help-text">
-                  VLAN（Virtual Local Area Network，虚拟局域网）技术可以把一个物理LAN划分成多个逻辑的LAN——VLAN，每个VLAN是一个广播域。处于同一VLAN的主机能够直接互通，而处于不同VLAN的主机不能够直接互通。
-                </p>
-              <h3>基于端口划分VLAN</h3>
-                <p class="help-text">
-                  VLAN可以基于端口进行划分。它按照设备端口来定义VLAN成员，将指定端口加入到指定VLAN中之后，端口就可以转发该VLAN的报文。
-                </p>
-                <span class="help-text">在某VLAN内，可根据需要配置端口加入Untagged端口列表或Tagged端口列表：</span>
-                <ul class="help-ul">
-                  <li>配置端口为Untagged端口，从Untagged端口发出的该VLAN报文不带VLAN Tag。</li>
-                  <li>配置端口为Tagged端口，从Tagged端口发出的该VLAN报文带VLAN Tag。</li>
-                </ul>
-                <span class="help-text">端口的链路类型分为三种。在端口加入某VLAN时，对不同链路类型的端口加入的端口列表要求不同：</span>
-                <ul class="help-ul" >
-                  <li>Access：端口只能发送一个VLAN的报文，发出去的报文不带VLAN Tag。该端口只能加入一个VLAN的Untagged端口列表。</li>
-                  <li>Trunk：端口能发送多个VLAN的报文，发出去的端口缺省VLAN的报文不带VLAN Tag，其他VLAN的报文都必须带VLAN Tag。在端口缺省VLAN中，该端口只能加入Untagged端口列表；在其他VLAN中，该端口只能加入Tagged端口列表。</li>
-                  <li>Hybrid：端口能发送多个VLAN的报文，端口发出去的报文可根据需要配置某些VLAN的报文带VLAN Tag，某些VLAN的报文不带VLAN Tag。在不同VLAN中，该端口可以根据需要加入Untagged端口列表或Tagged端口列表。</li>
-                </ul>
-                <h3>VLAN接口</h3>
-                <p class="help-text">不同VLAN间的主机不能直接通信，通过设备上的VLAN接口，可以实现VLAN间的三层互通。VLAN接口是一种三层的虚拟接口，它不作为物理实体存在于设备上。每个VLAN对应一个VLAN接口，VLAN接口的IP地址可作为本VLAN内网络设备的网关地址，对需要跨网段的报文进行基于IP地址的三层转发。</p>
-                <h2>注意事项</h2>
-                <p class="help-text">VLAN 1为系统缺省VLAN，用户不能手工创建和删除。</p>
-            </div>
-          <span slot="footer"
-                class="dialog-footer">
+      <el-dialog title="VLAN联机帮助"
+                 :visible.sync="helpDialog"
+                 width="50%">
+        <div class="help">
+          <h2>VLAN简介</h2>
+          <p class="help-text">
+            VLAN（Virtual Local Area Network，虚拟局域网）技术可以把一个物理LAN划分成多个逻辑的LAN——VLAN，每个VLAN是一个广播域。处于同一VLAN的主机能够直接互通，而处于不同VLAN的主机不能够直接互通。
+          </p>
+          <h3>基于端口划分VLAN</h3>
+          <p class="help-text">
+            VLAN可以基于端口进行划分。它按照设备端口来定义VLAN成员，将指定端口加入到指定VLAN中之后，端口就可以转发该VLAN的报文。
+          </p>
+          <span class="help-text">在某VLAN内，可根据需要配置端口加入Untagged端口列表或Tagged端口列表：</span>
+          <ul class="help-ul">
+            <li>配置端口为Untagged端口，从Untagged端口发出的该VLAN报文不带VLAN Tag。</li>
+            <li>配置端口为Tagged端口，从Tagged端口发出的该VLAN报文带VLAN Tag。</li>
+          </ul>
+          <span class="help-text">端口的链路类型分为三种。在端口加入某VLAN时，对不同链路类型的端口加入的端口列表要求不同：</span>
+          <ul class="help-ul" >
+            <li>Access：端口只能发送一个VLAN的报文，发出去的报文不带VLAN Tag。该端口只能加入一个VLAN的Untagged端口列表。</li>
+            <li>Trunk：端口能发送多个VLAN的报文，发出去的端口缺省VLAN的报文不带VLAN Tag，其他VLAN的报文都必须带VLAN Tag。在端口缺省VLAN中，该端口只能加入Untagged端口列表；在其他VLAN中，该端口只能加入Tagged端口列表。</li>
+            <li>Hybrid：端口能发送多个VLAN的报文，端口发出去的报文可根据需要配置某些VLAN的报文带VLAN Tag，某些VLAN的报文不带VLAN Tag。在不同VLAN中，该端口可以根据需要加入Untagged端口列表或Tagged端口列表。</li>
+          </ul>
+          <h3>VLAN接口</h3>
+          <p class="help-text">不同VLAN间的主机不能直接通信，通过设备上的VLAN接口，可以实现VLAN间的三层互通。VLAN接口是一种三层的虚拟接口，它不作为物理实体存在于设备上。每个VLAN对应一个VLAN接口，VLAN接口的IP地址可作为本VLAN内网络设备的网关地址，对需要跨网段的报文进行基于IP地址的三层转发。</p>
+          <h2>注意事项</h2>
+          <p class="help-text">VLAN 1为系统缺省VLAN，用户不能手工创建和删除。</p>
+        </div>
+        <span slot="footer"
+              class="dialog-footer">
             <el-button @click="helpDialog = false">取 消</el-button>
             <el-button type="primary"
                        @click="helpDialog = false">确 定</el-button>
           </span>
-        </el-dialog>
+      </el-dialog>
+
+      <div class="head-button">
+
       </div>
     </div>
 
@@ -56,9 +54,11 @@
           </el-input>
       </div>
       <div class="right-container">
+
         <el-button @click="reload" title="刷新"><i class="el-icon-refresh" ></i></el-button>
         <el-button @click="deleteVLAN($event)"><i class="el-icon-delete"></i></el-button>
         <el-button @click="add" title="添加VLAN"><i class="el-icon-plus" ></i></el-button>
+        <el-button @click="helpDialog = true" ><i class="el-icon-notebook-1" title="帮助"></i></el-button>
       </div>
     </div>
 
@@ -294,7 +294,7 @@ export default {
 
 }
 </script>
-<style>
+<style scoped>
   /* 设置头部 */
   .port-head{
     display: flex;
@@ -321,7 +321,6 @@ export default {
     height: 80px;
     line-height: 80px;
     margin-top: 10px;
-    border-top: 2px solid #EBEEF5;
     border-bottom: 2px solid #EBEEF5;
   }
   .el-col-16>.el-input,.VLANbox>.el-input{
