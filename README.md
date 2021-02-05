@@ -25,3 +25,9 @@ npm test
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## 问题
+
+表格更改之后的数据获取时不是勾选的数据，而是最后点击时的数据。
+
+可视化的echart可以优化一下。
