@@ -1,6 +1,5 @@
 <template>
   <div class="VLANManagement">
-    <div class="port-head">
       <el-dialog title="VLAN联机帮助"
                  :visible.sync="helpDialog"
                  width="50%">
@@ -37,29 +36,48 @@
           </span>
       </el-dialog>
 
-      <div class="head-button">
 
-      </div>
-    </div>
+
 
     <div class="select-container">
-      <div class="left-container">
+      <div >
         <el-input
-            class="el-input"
-            placeholder="搜索"
-            v-model="searchData"
-            clearable
-          >
-          <i slot="suffix" class="el-icon-search"></i>
-          </el-input>
+          class="el-input"
+          placeholder="搜索"
+          v-model="searchData"
+          clearable
+          size="small"
+        >
+        </el-input>
       </div>
-      <div class="right-container">
+      <div>
+        <el-button
+          @click="add"
+          title="添加VLAN"
+          size="small"
+          type="primary">添加
+        </el-button>
+        <el-button
+          @click="deleteVLAN($event)"
+          size="small"
+          type="danger">删除
+        </el-button>
+        <el-button
+          @click="reload"
+          title="刷新"
+          size="small"
+          type="warning">刷新
+        </el-button>
+        <el-button
+          @click="helpDialog = true"
+          size="small"
+          type="info">帮助
+        </el-button>
+      </div>
 
-        <el-button @click="reload" title="刷新"><i class="el-icon-refresh" ></i></el-button>
-        <el-button @click="deleteVLAN($event)"><i class="el-icon-delete"></i></el-button>
-        <el-button @click="add" title="添加VLAN"><i class="el-icon-plus" ></i></el-button>
-        <el-button @click="helpDialog = true" ><i class="el-icon-notebook-1" title="帮助"></i></el-button>
-      </div>
+
+
+
     </div>
 
     <div class="VLANtable">
@@ -81,6 +99,7 @@
            :class="{'checkbox':scope.row.VLAN == 1 || typeof(scope.row.id)=='string'}"
            @change="getDeleteData($event,scope)"
            style="float:left"
+           name="check"
            >
           </el-checkbox>
           <span >{{scope.row.VLAN}}</span>
@@ -176,13 +195,10 @@ export default {
     sendAdd(VLAN){
       let param = {
         url:'/cgi-bin/setvlan.cgi',
-        // data:JSON.stringify(dialogData),
-        // data:dialogData,
         method: 'post',
         bodyData: VLAN
       }
       console.log(param)
-      // this.dialogVisible = false
       this.$http.requestPost(param).then((result)=>{
         // console.log(result.data)
         if(result.data.State == "success"){
@@ -192,28 +208,52 @@ export default {
         }else{
           this.$message({type:'warning',message:'未知错误，请联系开发人员！'})
         }
-        // this.dialogVisible=false
       })
     },
     //删除VLAN
     deleteVLAN(event)  {
-      const data=JSON.parse(JSON.stringify(this.deleteData))
-      delete data.id
-      let param = {
-        url:'/cgi-bin/setvlan.cgi',
-        method: 'post',
-        bodyData: data
-      }
-      this.$set(param.bodyData,'Action',0)
-      this.$http.requestPost(param).then((result)=>{
-        if(result.data.State == "success"){
-          this.reload()
-        }else if(result.data.State=='fail'){
-          this.$message({type:'warning',message:result.data.Info});
-        }else{
-          this.$message({type:'warning',message:'未知错误，请联系开发人员！'})
+      //判断是否勾选了选框
+      const checkGrounp =  [...document.querySelectorAll('input[name="check"]')];
+      let checkedGrounp = [];
+      checkGrounp.forEach(item=>{
+        if(item.checked){
+          checkedGrounp.push(item);
         }
       })
+      if(checkedGrounp.length==1){
+        //勾选一个，可删除
+        const data=JSON.parse(JSON.stringify(this.deleteData))
+        delete data.id
+        let param = {
+          url:'/cgi-bin/setvlan.cgi',
+          method: 'post',
+          bodyData: data
+        }
+        this.$set(param.bodyData,'Action',0)
+        this.$http.requestPost(param).then((result)=>{
+          if(result.data.State == "success"){
+            this.reload()
+          }else if(result.data.State=='fail'){
+            this.$message({type:'warning',message:result.data.Info});
+          }else{
+            this.$message({type:'warning',message:'未知错误，请联系开发人员！'})
+          }
+        })
+      }else if(checkedGrounp.length==0){
+        //没勾选时
+        this.$message({
+          message:'没有勾选需要删除的用户',
+          type:'warning'
+        })
+      }else{
+        this.$message({
+          message:'一次只能删除一个用户',
+          type:'warning'
+        })
+      }
+
+
+
     },
 
     //制造假数据列表
@@ -295,41 +335,30 @@ export default {
 }
 </script>
 <style scoped>
-  /* 设置头部 */
-  .port-head{
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-  }
-  .head-text{
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    font-size: 22px;
-  }
+
+
   .help-text{
     margin-left: 20px;
   }
   .help-ul{
     margin-left: 35px;
   }
-  /* 搜索容器 */
+  .el-input--small{
+    width: 250px;
+    margin-right: 15px;
+  }
   .select-container{
     display: flex;
-    flex: 1;
-    justify-content: space-between;
-    height: 80px;
-    line-height: 80px;
-    margin-top: 10px;
-    border-bottom: 2px solid #EBEEF5;
   }
-  .el-col-16>.el-input,.VLANbox>.el-input{
-    width: 350px;
-    height: 45px;
+
+    /*.el-col-16>.el-input,.VLANbox>.el-input{*/
+  /*  width: 350px;*/
+  /*  height: 45px;*/
+  /*}*/
+  .VLANtable{
+    margin-top: 15px;
   }
-  .right-container{
-    margin-left: 10px;
-  }
+
   .VLANManagement>.el-row{
     margin-top: 15px;
   }

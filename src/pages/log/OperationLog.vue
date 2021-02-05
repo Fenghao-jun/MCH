@@ -1,38 +1,51 @@
 <template>
 <div class="OperationLog">
 
-  <div class="port-head">
-    <div class="head-text">
-      <span>操作日志</span>
-    </div>
-    <div class="head-button">
-<!--      <el-button title="帮助"><i class="el-icon-notebook-1"></i></el-button>-->
-    </div>
-  </div>
+<!--  <div class="port-head">-->
+<!--    <div class="head-text">-->
+<!--      <span>操作日志</span>-->
+<!--    </div>-->
+<!--    <div class="head-button">-->
+<!--&lt;!&ndash;      <el-button title="帮助"><i class="el-icon-notebook-1"></i></el-button>&ndash;&gt;-->
+<!--    </div>-->
+<!--  </div>-->
 
   <div class="select-container">
     <div class="left-container">
-        <span>选择搜索时间：</span>
         <el-date-picker
           v-model="Stime"
           type="date"
           placeholder="开始日期"
           format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd">
+          value-format="yyyy-MM-dd"
+          size="small">
         </el-date-picker>
         <el-date-picker
           v-model="Etime"
           type="date"
           placeholder="结束日期"
           format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd">
+          value-format="yyyy-MM-dd"
+          size="small">
         </el-date-picker>
-        <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          @click="search"
+          size="small">搜索</el-button>
+        <el-button
+          @click="dialogVisible = true"
+          size="small"
+          type="danger">删除</el-button>
+        <el-button
+          @click="reload"
+          size="small"
+          type="warning">刷新</el-button>
+
     </div>
 
     <div class="right-container">
-      <el-button @click="reload"><i class="el-icon-refresh"></i></el-button>
-      <el-button @click="dialogVisible = true"><i class="el-icon-delete"></i></el-button>
+
      </div>
   </div>
 
@@ -264,10 +277,10 @@ export default {
     display: flex;
     flex: 1;
     justify-content: space-between;
-    height: 80px;
-    line-height: 80px;
-    margin-top: 10px;
-    border-top: 2px solid #EBEEF5;
-    border-bottom: 2px solid #EBEEF5;
+    /*height: 80px;*/
+    /*line-height: 80px;*/
+    /*margin-top: 10px;*/
+    /*border-top: 2px solid #EBEEF5;*/
+    padding-bottom: 15px;
   }
 </style>

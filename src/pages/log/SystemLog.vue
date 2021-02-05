@@ -1,18 +1,11 @@
 <template>
 <div class="SystemLog">
 
-  <div class="port-head">
-    <div class="head-text">
-      <span>系统日志</span>
-    </div>
-    <div class="head-button">
-<!--      <el-button title="帮助"><i class="el-icon-notebook-1"></i></el-button>-->
-    </div>
-  </div>
+
 
   <div class="select-container">
     <div class="left-container">
-      <el-select v-model="level" placeholder="请选择" clearable @clear="reload">
+      <el-select v-model="level" placeholder="请选择" clearable @clear="reload" size="small">
         <el-option
           v-for="item in levelFilter"
           :key="item.value"
@@ -20,13 +13,23 @@
           :value="item.value">
         </el-option>
       </el-select>
-      <el-button type="primary" icon="el-icon-search" @click="search(level)">搜索</el-button>
+      <el-button
+        type="primary"
+        icon="el-icon-search"
+        @click="search(level)"
+        size="small">搜索</el-button>
+      <el-button
+        @click="dialogVisible = true"
+        size="small"
+        type="danger">删除</el-button>
+      <el-button
+        @click="reload"
+        size="small"
+        type="warning">刷新</el-button>
+
     </div>
 
-    <div class="right-container">
-      <el-button @click="reload"><i class="el-icon-refresh"></i></el-button>
-      <el-button @click="dialogVisible = true"><i class="el-icon-delete"></i></el-button>
-     </div>
+
   </div>
 
   <el-dialog
@@ -128,10 +131,10 @@ export default {
       Page:1,
       dialogVisible: false,
       headerStyle:{
-        // background: '#909399',
-        // color:'#FFFFFF',
-        color:'red !important'
-    }
+        backgroundColor:'#94a2af',
+        color:'#000000',
+        borderRight:'1px solid #a8bcd0',
+      }
     };
   },
   methods: {
@@ -306,12 +309,10 @@ export default {
   .select-container{
     display: flex;
     flex: 1;
-    justify-content: space-between;
-    height: 80px;
-    line-height: 80px;
-    margin-top: 10px;
-    border-top: 2px solid #EBEEF5;
-    border-bottom: 2px solid #EBEEF5;
+    /*justify-content: space-between;*/
+    /*height: 80px;*/
+    /*line-height: 80px;*/
+    padding-bottom: 15px;
   }
   .levelType{
     width: 20px;
@@ -333,4 +334,5 @@ export default {
   .debugging{
     background:grey
   }
+
 </style>

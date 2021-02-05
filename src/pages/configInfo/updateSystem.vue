@@ -11,6 +11,8 @@
     <el-button style="margin-left: 10px;" size="small" type="success" @click="update">上传到服务器</el-button>
     <div slot="tip" class="el-upload__tip">只能上传zip文件</div>
   </el-upload>
+
+
 </template>
 
 <script>

@@ -2,12 +2,18 @@
   <div class="User">
     <div class="port-head">
       <div class="head-text">
-        <span>管理员设置</span>
-      </div>
-      <div class="right-container">
-        <el-button @click="userEdit"><i class="el-icon-s-tools"></i></el-button>
-        <el-button @click="deleteUser"> <i class="el-icon-delete"></i></el-button>
-        <el-button @click="openAddDialog"><i class="el-icon-plus"></i></el-button>
+        <el-button
+          @click="userEdit"
+          size="small"
+          type="primary">编辑</el-button>
+        <el-button
+          @click="openAddDialog"
+          size="small"
+          type="primary">添加</el-button>
+        <el-button
+          @click="deleteUser"
+          size="small"
+          type="danger">删除</el-button>
       </div>
     </div>
 
@@ -433,18 +439,19 @@ export default {
   .port-head{
     display: flex;
     flex: 1;
-    justify-content: space-between;
-    height: 80px;
-    line-height: 80px;
-    margin-top: 10px;
-    border-top: 2px solid #EBEEF5;
-    border-bottom: 2px solid #EBEEF5;
+    /*justify-content: space-between;*/
+    /*height: 80px;*/
+    /*line-height: 80px;*/
+    /*margin-top: 10px;*/
+    /*border-top: 2px solid #EBEEF5;*/
+    /*border-bottom: 2px solid #EBEEF5;*/
+    padding-bottom: 15px;
   }
 
-  .head-text{
-    height: 40px;
-    line-height: 80px;
-    text-align: center;
-    font-size: 22px;
-  }
+  /*.head-text{*/
+  /*  height: 40px;*/
+  /*  line-height: 80px;*/
+  /*  text-align: center;*/
+  /*  font-size: 22px;*/
+  /*}*/
 </style>

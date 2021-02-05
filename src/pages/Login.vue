@@ -155,14 +155,14 @@ export default {
         }
       });
       // 临时模拟登录
-      // if (this.form.name === '123456' && this.form.password === '123456'){
-      //   this.$message({type:'success', message: '登录成功'})
-      //   let loginTime = new Date().toLocaleString()
-      //   window.sessionStorage.setItem('isLogin', 'true')
-      //   window.sessionStorage.setItem('loginTime', loginTime)
-      //   this.setStateValue({ name: 'ableFlag', value: true})
-      //   this.$router.push({path:'/home'})
-      // }
+      if (this.form.name === '123456' && this.form.password === '123456'){
+        this.$message({type:'success', message: '登录成功'})
+        let loginTime = new Date().toLocaleString()
+        window.sessionStorage.setItem('isLogin', 'true')
+        window.sessionStorage.setItem('loginTime', loginTime)
+        this.setStateValue({ name: 'ableFlag', value: true})
+        this.$router.push({path:'/home'})
+      }
 
     },
     logIn(){

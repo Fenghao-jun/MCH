@@ -4,39 +4,36 @@
 
     <!-- 搜索容器 -->
     <div class="select-container">
-      <div class="left-container">
-        <!-- <el-select v-model="value">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select> -->
+        <div>
+          <el-input
+            class="el-input"
+            placeholder="搜索"
+            v-model="searchData"
+            clearable
+            @keyup.enter.native="search"
+            @clear="reload"
+            size="small"
+          >
+          </el-input>
+        </div>
+        <div>
+          <el-button
+            type="primary"
+            @click="search"
+            size="small">搜索</el-button>
+          <el-button
+            type="primary"
+            @click="openDialog"
+            size="small">编辑</el-button>
+          <el-button
+            type="warning"
+            @click="reload"
+            size="small">刷新</el-button>
+        </div>
 
-        <!-- 搜索框 -->
-        <el-input
-          class="el-input"
-          placeholder="搜索"
-          v-model="searchData"
-          clearable
-          @keyup.enter.native="search"
-          @clear="reload"
-        >
-        </el-input>
-        <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
 
-<!--        <el-button type="button">-->
-<!--          <span>更新软件</span>-->
-<!--        </el-button>-->
-        <!-- 筛选 -->
-      </div>
 
-      <!-- right -->
-      <div class="right-container">
-        <el-button icon="el-icon-refresh" @click="reload"></el-button>
 
-      </div>
     </div>
     <!-- 显示表单 -->
     <div class="port-table">
@@ -44,13 +41,17 @@
         :data="tableData"
         border
         :max-height="tableHeight"
-        @row-click="openDialog"
+        @row-click="getDialogData"
         >
+
 
           <el-table-column
             type="index"
             width="55"
             label="序号">
+            <template slot-scope="scope" >
+              <el-checkbox  name="check">{{scope.$index+1}}</el-checkbox>
+            </template>
           </el-table-column>
 
           <!-- <el-table-column
@@ -728,8 +729,9 @@ methods: {
     })
   },
 
-  //对话框
-  openDialog(event){
+
+  getDialogData(event){
+
     this.dialogData = JSON.parse(JSON.stringify(event))
 
     //判断速率是否自协商
@@ -746,8 +748,38 @@ methods: {
     }
     console.warn(this.dialogData)
 
-    this.dialogVisible = true
+    // this.dialogVisible = true
   },
+
+  openDialog(){
+    const checkGrounp = [...document.querySelectorAll('input[name="check"]')];
+    console.log(checkGrounp)
+    let checkedGrounp = [];
+    checkGrounp.forEach(item=>{
+      if(item.checked){
+        checkedGrounp.push(item)
+      }
+    })
+    console.log(checkedGrounp)
+
+    if(checkedGrounp.length == 1){
+      this.dialogVisible = true;
+    }else if(checkedGrounp.length==0){
+      this.$message({
+        message:'请勾选需要编辑的端口',
+        type:'warning'
+      })
+    }else{
+      this.$message({
+        message:'只能编辑一个端口',
+        type:'warning'
+      })
+    }
+
+
+  },
+
+
 
   changLinkStatus(){
     console.log(this.dialogData.checked)
@@ -771,19 +803,22 @@ ul{
 .select-container {
   display: flex;
   flex: 1;
-  justify-content: space-between;
 }
-.el-input {
-  margin-left: 15px;
-  width: 350px;
+.el-input--small{
+  width: 250px;
+  margin-right: 15px;
 }
+
 .select-container {
   /*height: 80px;*/
   /*line-height: 80px;*/
   text-align: center;
   /*border-top: 2px solid #ebeef5;*/
-  padding: 1% 0;
-  border-bottom: 2px solid #ebeef5;
+  /*padding: 1% 0;*/
+  /*border-bottom: 2px solid #ebeef5;*/
+}
+.port-table{
+  margin-top: 15px;
 }
 .left-container {
   width: 500px;
