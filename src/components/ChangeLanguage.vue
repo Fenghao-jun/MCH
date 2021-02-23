@@ -1,7 +1,7 @@
 <template>
   <el-dropdown placement="bottom" class="change-lang" @command="changeLanguage">
     <span class="el-dropdown-link" :style="'color:'+ color || 'black' ">
-      {{lang}}<i class="el-icon-arrow-down el-icon--right"></i>
+      {{this.lang}}<i class="el-icon-arrow-down el-icon--right"></i>
     </span>
     <el-dropdown-menu slot="dropdown" >
       <el-dropdown-item command="cn">

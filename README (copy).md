@@ -1,6 +1,6 @@
 # webmaster
 
-> MCH交换机网管
+> 三接口网管项目
 
 ## Build Setup
 
@@ -26,12 +26,8 @@ npm test
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-## 项目部署
+## 问题
 
-打开控制台运行
+表格更改之后的数据获取时不是勾选的数据，而是最后点击时的数据。
 
-```bash
-npm run build
-```
-
-命令完成后，在dist文件夹下生成打包之后文件，放入MCH文件夹进行覆盖，将文件夹
+可视化的echart可以优化一下。

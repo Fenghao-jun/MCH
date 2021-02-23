@@ -41,7 +41,6 @@
         :data="tableData"
         border
         :max-height="tableHeight"
-        @row-click="getDialogData"
         >
 
 
@@ -50,7 +49,7 @@
             width="55"
             label="序号">
             <template slot-scope="scope" >
-              <el-checkbox  name="check">{{scope.$index+1}}</el-checkbox>
+              <el-checkbox  name="check" @change="getDialogData($event,scope)">{{scope.$index+1}}</el-checkbox>
             </template>
           </el-table-column>
 
@@ -430,7 +429,8 @@ import idea from '../../public.js';
 export default {
   //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-  this.reload()
+  this.reload();
+  this.createData();
 },
 activated(){
   this.reload()
@@ -471,6 +471,7 @@ data() {
         //弹窗
         dialogVisible: false,
         dialogData:[],
+        dialogDataArr:[],
         type:[{
                value:"Access",
                label:"Access"
@@ -598,7 +599,7 @@ methods: {
   //设置
   setPort(){
     let submitDate=JSON.parse(JSON.stringify(this.dialogData));
-    //判断是否存在VLAN
+    //判断是否存在VLAN,再进行后续判断
     if(this.hasVLAN.includes(Number(submitDate.PVID))){
       submitDate.PVID = parseInt(submitDate.PVID)
       //类型为Trunk进入判断
@@ -675,6 +676,7 @@ methods: {
       if(this.dialogData.RateValue=='自协商'){
         submitDate.RateValue='AUTO_NEGOTIATION'
       }
+      //网络请求部分
       let param ={
       url: '/cgi-bin/setport.cgi',
       method: 'post',
@@ -728,29 +730,20 @@ methods: {
       return  item.Interface.includes(this.searchData)
     })
   },
-
-
-  getDialogData(event){
-
-    this.dialogData = JSON.parse(JSON.stringify(event))
-
-    //判断速率是否自协商
-    if(this.dialogData.RateValue == "UN_NEGOTIATION"){
-      if(this.dialogData.Rate == "1000M"){
-        this.dialogData.RateValue = "1000Mbps"
-      }else if(this.dialogData.Rate == "100M"){
-        this.dialogData.RateValue = "100Mbps"
-      }else if(this.dialogData.Rate == "10M"){
-        this.dialogData.RateValue = "10Mbps"
-      }
+  //获取dialog数据
+  getDialogData(checked,scope){
+    if(checked){
+      this.dialogDataArr.push(scope.row)
+      console.log(checked);
+      console.log(scope)
     }else{
-      this.dialogData.RateValue = "自协商"
-    }
-    console.warn(this.dialogData)
-
+      //将多选之后的data存入一个数组，使用findindex查找到取消勾选的行在arr中的位置并进行删除，这样留下的第一个就是需要调整的数组
+      this.dialogDataArr.splice(this.dialogDataArr.findIndex(item=>{ return item.Interface==scope.row.Interface}),1)
+    };
+    // this.dialogData = JSON.parse(JSON.stringify(event))
     // this.dialogVisible = true
   },
-
+  //DialogData赋值，打开Dialog
   openDialog(){
     const checkGrounp = [...document.querySelectorAll('input[name="check"]')];
     console.log(checkGrounp)
@@ -763,6 +756,21 @@ methods: {
     console.log(checkedGrounp)
 
     if(checkedGrounp.length == 1){
+      console.log(this.dialogDataArr);
+      this.dialogData=this.dialogDataArr[0]
+      console.log(this.dialogData)
+      //判断速率是否自协商
+      if(this.dialogData.RateValue == "UN_NEGOTIATION"){
+        if(this.dialogData.Rate == "1000M"){
+          this.dialogData.RateValue = "1000Mbps"
+        }else if(this.dialogData.Rate == "100M"){
+          this.dialogData.RateValue = "100Mbps"
+        }else if(this.dialogData.Rate == "10M"){
+          this.dialogData.RateValue = "10Mbps"
+        }
+      }else{
+        this.dialogData.RateValue = "自协商"
+      }
       this.dialogVisible = true;
     }else if(checkedGrounp.length==0){
       this.$message({

@@ -49,7 +49,6 @@
       :data="tableData"
       style="width: 100%"
       border
-      :header-cell-style="headerStyle"
       >
         <el-table-column
           type="index"
@@ -130,11 +129,11 @@ export default {
       total:0,
       Page:1,
       dialogVisible: false,
-      headerStyle:{
-        backgroundColor:'#94a2af',
-        color:'#000000',
-        borderRight:'1px solid #a8bcd0',
-      }
+      // headerStyle:{
+      //   backgroundColor:'#94a2af',
+      //   color:'#000000',
+      //   borderRight:'1px solid #a8bcd0',
+      // }
     };
   },
   methods: {
